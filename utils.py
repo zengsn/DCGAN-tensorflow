@@ -193,6 +193,10 @@ def visualize(sess, dcgan, config, option):
         samples = sess.run(dcgan.sampler, feed_dict={dcgan.z: z_sample})
 
       save_images(samples, [image_frame_dim, image_frame_dim], './samples/test_arange_%s.png' % (idx))
+      # save labels to use the generated samples to augment datasets
+      labels_json = './samples/test_arange_%s.json' % (idx)
+      with open(labels_json, "w") as labels_of_samples:
+        labels_of_samples.write(json.dumps(y.tolist())) 
   elif option == 2:
     values = np.arange(0, 1, 1./config.batch_size)
     for idx in [random.randint(0, dcgan.z_dim - 1) for _ in xrange(dcgan.z_dim)]:
