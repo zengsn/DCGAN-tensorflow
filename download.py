@@ -164,6 +164,29 @@ def download_mnist(dirpath):
     print('Decompressing ', file_name)
     subprocess.call(cmd)
 
+def download_fashionmnist(dirpath):
+  data_dir = os.path.join(dirpath, 'fashionmnist')
+  if os.path.exists(data_dir):
+    print('Found Fashion-MNIST - skip')
+    return
+  else:
+    os.mkdir(data_dir)
+  url_base = 'https://github.com/zalandoresearch/fashion-mnist/blob/master/data/fashion/'
+  file_names = ['train-images-idx3-ubyte.gz',
+                'train-labels-idx1-ubyte.gz',
+                't10k-images-idx3-ubyte.gz',
+                't10k-labels-idx1-ubyte.gz']
+  for file_name in file_names:
+    url = (url_base+file_name).format(**locals())
+    print(url)
+    out_path = os.path.join(data_dir,file_name)
+    cmd = ['curl', url, '-o', out_path]
+    print('Downloading ', file_name)
+    subprocess.call(cmd)
+    cmd = ['gzip', '-d', out_path]
+    print('Decompressing ', file_name)
+    subprocess.call(cmd)
+
 def prepare_data_dir(path = './data'):
   if not os.path.exists(path):
     os.mkdir(path)
@@ -178,3 +201,5 @@ if __name__ == '__main__':
     download_lsun('./data')
   if 'mnist' in args.datasets:
     download_mnist('./data')
+  if 'fashionmnist' in args.datasets:
+    download_fashionmnist('./data')
