@@ -171,7 +171,7 @@ def download_fashionmnist(dirpath):
     return
   else:
     os.mkdir(data_dir)
-  url_base = 'https://github.com/zalandoresearch/fashion-mnist/blob/master/data/fashion/'
+  url_base = 'https://raw.githubusercontent.com/zalandoresearch/fashion-mnist/master/data/fashion/'
   file_names = ['train-images-idx3-ubyte.gz',
                 'train-labels-idx1-ubyte.gz',
                 't10k-images-idx3-ubyte.gz',
