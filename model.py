@@ -70,8 +70,8 @@ class DCGAN(object):
     self.input_fname_pattern = input_fname_pattern
     self.checkpoint_dir = checkpoint_dir
     self.data_dir = data_dir
-
-    if self.dataset_name == 'mnist' or self.dataset_name == 'fashionmnist':
+ 
+    if self.dataset_name == 'mnist' or self.dataset_name == 'emnistdigits' or self.dataset_name == 'fashionmnist':
       self.data_X, self.data_y = self.load_mnist()
       self.c_dim = self.data_X[0].shape[-1]
     else:
@@ -168,7 +168,7 @@ class DCGAN(object):
 
     sample_z = np.random.uniform(-1, 1, size=(self.sample_num , self.z_dim))
     
-    if config.dataset == 'mnist' or config.dataset == 'fashionmnist':
+    if config.dataset == 'mnist' or config.dataset == 'emnistdigits' or config.dataset == 'fashionmnist':
       sample_inputs = self.data_X[0:self.sample_num]
       sample_labels = self.data_y[0:self.sample_num]
     else:
@@ -196,7 +196,7 @@ class DCGAN(object):
       print(" [!] Load failed...")
 
     for epoch in xrange(config.epoch):
-      if config.dataset == 'mnist' or config.dataset == 'fashionmnist':
+      if config.dataset == 'mnist' or config.dataset == 'emnistdigits' or config.dataset == 'fashionmnist':
         batch_idxs = min(len(self.data_X), config.train_size) // config.batch_size
       else:      
         self.data = glob(os.path.join(
@@ -205,7 +205,7 @@ class DCGAN(object):
         batch_idxs = min(len(self.data), config.train_size) // config.batch_size
 
       for idx in xrange(0, int(batch_idxs)):
-        if config.dataset == 'mnist' or config.dataset == 'fashionmnist':
+        if config.dataset == 'mnist' or config.dataset == 'emnistdigits' or config.dataset == 'fashionmnist':
           batch_images = self.data_X[idx*config.batch_size:(idx+1)*config.batch_size]
           batch_labels = self.data_y[idx*config.batch_size:(idx+1)*config.batch_size]
         else:
@@ -226,7 +226,7 @@ class DCGAN(object):
         batch_z = np.random.uniform(-1, 1, [config.batch_size, self.z_dim]) \
               .astype(np.float32)
 
-        if config.dataset == 'mnist' or config.dataset == 'fashionmnist':
+        if config.dataset == 'mnist' or config.dataset == 'emnistdigits' or config.dataset == 'fashionmnist':
           # Update D network
           _, summary_str = self.sess.run([d_optim, self.d_sum],
             feed_dict={ 
@@ -287,7 +287,7 @@ class DCGAN(object):
             time.time() - start_time, errD_fake+errD_real, errG))
 
         if np.mod(counter, 100) == 1:
-          if config.dataset == 'mnist' or config.dataset == 'fashionmnist':
+          if config.dataset == 'mnist' or config.dataset == 'emnistdigits' or config.dataset == 'fashionmnist':
             samples, d_loss, g_loss = self.sess.run(
               [self.sampler, self.d_loss, self.g_loss],
               feed_dict={

@@ -46,7 +46,7 @@ def main(_):
   run_config.gpu_options.allow_growth=True
 
   with tf.Session(config=run_config) as sess:
-    if FLAGS.dataset == 'mnist' or FLAGS.dataset == 'fashionmnist':
+    if FLAGS.dataset == 'mnist' or FLAGS.dataset == 'emnistdigits' or FLAGS.dataset == 'fashionmnist':
       dcgan = DCGAN(
           sess,
           input_width=FLAGS.input_width,
