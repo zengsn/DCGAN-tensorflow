@@ -21,8 +21,8 @@ from tqdm import tqdm
 from six.moves import urllib
 
 parser = argparse.ArgumentParser(description='Download dataset for DCGAN.')
-parser.add_argument('datasets', metavar='N', type=str, nargs='+', choices=['celebA', 'lsun', 'mnist', 'emnist', 'fashionmnist'],
-           help='name of dataset to download [celebA, lsun, mnist, emnist, fashionmnist]')
+parser.add_argument('datasets', metavar='N', type=str, nargs='+', choices=['celebA', 'lsun', 'mnist', 'emnistdigits', 'fashionmnist'],
+           help='name of dataset to download [celebA, lsun, mnist, emnistdigits, fashionmnist]')
 
 def download(url, dirpath):
   filename = url.split('/')[-1]
@@ -187,23 +187,8 @@ def download_fashionmnist(dirpath):
     print('Decompressing ', file_name)
     subprocess.call(cmd)
 
-def download_emnist(dirpath):
-  data_dir = os.path.join(dirpath, 'emnist')
-  if os.path.exists(data_dir):
-    print('Found EMNIST - skip')
-    return
-  else:
-    os.mkdir(data_dir)
-  url_gzip = 'http://www.itl.nist.gov/iaui/vip/cs_links/EMNIST/gzip.zip';
-  print(url_gzip)
-  file_name = 'gzip.zip';
-  out_path = os.path.join(data_dir,file_name)
-  cmd = ['curl', url_gzip, '-o', out_path]
-  print('Downloading ', file_name)
-  subprocess.call(cmd)
-  cmd = ['gzip', '-d', out_path]
-  print('Decompressing ', file_name)
-  subprocess.call(cmd)
+def download_emnistdigits(dirpath):
+  print('Please download the dataset manually from https://www.nist.gov/itl/iad/image-group/emnist-dataset ')
 
 def prepare_data_dir(path = './data'):
   if not os.path.exists(path):
@@ -219,7 +204,7 @@ if __name__ == '__main__':
     download_lsun('./data')
   if 'mnist' in args.datasets:
     download_mnist('./data')
-  if 'emnist' in args.datasets:
-    download_emnist('./data')
+  if 'emnistdigits' in args.datasets:
+    download_emnistdigits('./data')
   if 'fashionmnist' in args.datasets:
     download_fashionmnist('./data')
