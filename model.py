@@ -70,9 +70,13 @@ class DCGAN(object):
     self.input_fname_pattern = input_fname_pattern
     self.checkpoint_dir = checkpoint_dir
     self.data_dir = data_dir
+    print(self.dataset_name)
  
-    if self.dataset_name == 'mnist' or self.dataset_name == 'emnistdigits' or self.dataset_name == 'fashionmnist':
+    if self.dataset_name == 'mnist' or self.dataset_name == 'fashionmnist':
       self.data_X, self.data_y = self.load_mnist()
+      self.c_dim = self.data_X[0].shape[-1]
+    elif: self.dataset_name == 'emnistdigits'
+      self.data_X, self.data_y = self.load_emnistdigits()
       self.c_dim = self.data_X[0].shape[-1]
     else:
       data_path = os.path.join(self.data_dir, self.dataset_name, self.input_fname_pattern)
@@ -477,6 +481,43 @@ class DCGAN(object):
     fd = open(os.path.join(data_dir,'t10k-labels-idx1-ubyte'))
     loaded = np.fromfile(file=fd,dtype=np.uint8)
     teY = loaded[8:].reshape((10000)).astype(np.float)
+
+    trY = np.asarray(trY)
+    teY = np.asarray(teY)
+    
+    X = np.concatenate((trX, teX), axis=0)
+    y = np.concatenate((trY, teY), axis=0).astype(np.int)
+    
+    seed = 547
+    np.random.seed(seed)
+    np.random.shuffle(X)
+    np.random.seed(seed)
+    np.random.shuffle(y)
+    
+    y_vec = np.zeros((len(y), self.y_dim), dtype=np.float)
+    for i, label in enumerate(y):
+      y_vec[i,y[i]] = 1.0
+    
+    return X/255.,y_vec
+
+  def load_emnistdigits(self):
+    data_dir = os.path.join(self.data_dir, self.dataset_name)
+    
+    fd = open(os.path.join(data_dir,'emnist-digits-train-images-idx3-ubyte'))
+    loaded = np.fromfile(file=fd,dtype=np.uint8)
+    trX = loaded[16:].reshape((240000,28,28,1)).astype(np.float)
+
+    fd = open(os.path.join(data_dir,'emnist-digits-train-labels-idx1-ubyte'))
+    loaded = np.fromfile(file=fd,dtype=np.uint8)
+    trY = loaded[8:].reshape((240000)).astype(np.float)
+
+    fd = open(os.path.join(data_dir,'emnist-digits-test-images-idx3-ubyte'))
+    loaded = np.fromfile(file=fd,dtype=np.uint8)
+    teX = loaded[16:].reshape((40000,28,28,1)).astype(np.float)
+
+    fd = open(os.path.join(data_dir,'emnist-digits-test-labels-idx1-ubyte'))
+    loaded = np.fromfile(file=fd,dtype=np.uint8)
+    teY = loaded[8:].reshape((40000)).astype(np.float)
 
     trY = np.asarray(trY)
     teY = np.asarray(teY)
