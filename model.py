@@ -75,7 +75,7 @@ class DCGAN(object):
     if self.dataset_name == 'mnist' or self.dataset_name == 'fashionmnist':
       self.data_X, self.data_y = self.load_mnist()
       self.c_dim = self.data_X[0].shape[-1]
-    elif: self.dataset_name == 'emnistdigits'
+    elif self.dataset_name == 'emnistdigits':
       self.data_X, self.data_y = self.load_emnistdigits()
       self.c_dim = self.data_X[0].shape[-1]
     else:
