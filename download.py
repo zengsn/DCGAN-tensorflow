@@ -196,7 +196,7 @@ def download_emnist(dirpath):
     os.mkdir(data_dir)
   url_gzip = 'http://www.itl.nist.gov/iaui/vip/cs_links/EMNIST/gzip.zip';
   print(url_gzip)
-  file_name = 'EMNIST-gzip.zip';
+  file_name = 'gzip.zip';
   out_path = os.path.join(data_dir,file_name)
   cmd = ['curl', url_gzip, '-o', out_path]
   print('Downloading ', file_name)
