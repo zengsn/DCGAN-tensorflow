@@ -21,8 +21,8 @@ from tqdm import tqdm
 from six.moves import urllib
 
 parser = argparse.ArgumentParser(description='Download dataset for DCGAN.')
-parser.add_argument('datasets', metavar='N', type=str, nargs='+', choices=['celebA', 'lsun', 'mnist', 'fashionmnist'],
-           help='name of dataset to download [celebA, lsun, mnist]')
+parser.add_argument('datasets', metavar='N', type=str, nargs='+', choices=['celebA', 'lsun', 'mnist', 'emnist', 'fashionmnist'],
+           help='name of dataset to download [celebA, lsun, mnist, emnist, fashionmnist]')
 
 def download(url, dirpath):
   filename = url.split('/')[-1]
@@ -219,5 +219,7 @@ if __name__ == '__main__':
     download_lsun('./data')
   if 'mnist' in args.datasets:
     download_mnist('./data')
+  if 'emnist' in args.datasets:
+    download_emnist('./data')
   if 'fashionmnist' in args.datasets:
     download_fashionmnist('./data')
