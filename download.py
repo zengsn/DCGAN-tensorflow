@@ -21,8 +21,8 @@ from tqdm import tqdm
 from six.moves import urllib
 
 parser = argparse.ArgumentParser(description='Download dataset for DCGAN.')
-parser.add_argument('datasets', metavar='N', type=str, nargs='+', choices=['celebA', 'lsun', 'mnist', 'emnistdigits', 'fashionmnist'],
-           help='name of dataset to download [celebA, lsun, mnist, emnistdigits, fashionmnist]')
+parser.add_argument('datasets', metavar='N', type=str, nargs='+', choices=['celebA', 'lsun', 'mnist', 'emnistdigits', 'fashionmnist', 'kmnist'],
+           help='name of dataset to download [celebA, lsun, mnist, emnistdigits, fashionmnist, kmnist]')
 
 def download(url, dirpath):
   filename = url.split('/')[-1]
@@ -190,6 +190,29 @@ def download_fashionmnist(dirpath):
 def download_emnistdigits(dirpath):
   print('Please download the dataset manually from https://www.nist.gov/itl/iad/image-group/emnist-dataset ')
 
+def download_kmnist(dirpath):
+  data_dir = os.path.join(dirpath, 'kmnist')
+  if os.path.exists(data_dir):
+    print('Found KMNIST - skip')
+    return
+  else:
+    os.mkdir(data_dir)
+  url_base = 'http://codh.rois.ac.jp/kmnist/dataset/kmnist/'
+  file_names = ['train-images-idx3-ubyte.gz',
+                'train-labels-idx1-ubyte.gz',
+                't10k-images-idx3-ubyte.gz',
+                't10k-labels-idx1-ubyte.gz']
+  for file_name in file_names:
+    url = (url_base+file_name).format(**locals())
+    print(url)
+    out_path = os.path.join(data_dir,file_name)
+    cmd = ['curl', url, '-o', out_path]
+    print('Downloading ', file_name)
+    subprocess.call(cmd)
+    cmd = ['gzip', '-d', out_path]
+    print('Decompressing ', file_name)
+    subprocess.call(cmd)
+
 def prepare_data_dir(path = './data'):
   if not os.path.exists(path):
     os.mkdir(path)
@@ -208,3 +231,5 @@ if __name__ == '__main__':
     download_emnistdigits('./data')
   if 'fashionmnist' in args.datasets:
     download_fashionmnist('./data')
+  if 'kmnist' in args.datasets:
+    download_kmnist('./data')
